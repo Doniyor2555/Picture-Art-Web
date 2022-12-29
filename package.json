@@ -27,6 +27,7 @@
   "dependencies": {
     "gulp-cli": "^2.3.0",
     "jquery": "^3.6.3",
+    "json-server": "^0.17.1",
     "slick-carousel": "^1.8.1"
   }
 }

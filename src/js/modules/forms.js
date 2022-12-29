@@ -1,4 +1,6 @@
-const forms = () => {
+import {postData} from "../services/requets";
+
+const forms = (state) => {
   const form = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
         upload = document.querySelectorAll('[name="upload"]');
@@ -15,15 +17,6 @@ const forms = () => {
   const path = {
       designer: 'assets/server.php',
       question: 'assets/question.php'
-  };
-
-  const postData = async (url, data) => {
-      let res = await fetch(url, {
-          method: "POST",
-          body: data
-      });
-
-      return await res.text();
   };
 
   const clearInputs = () => {
@@ -70,15 +63,25 @@ const forms = () => {
           statusMessage.appendChild(textMessage);
 
           const formData = new FormData(item);
+          
+          if(item.classList.contains("select")) {
+            for(let key in state) {
+                formData.append(key, state[key]);
+            }
+          }
+          console.log(state)
           let api;
-          item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
+          item.closest('.popup-design') || item.classList.contains("select") || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
           console.log(api);
+
+          console.log(state)
 
           postData(api, formData)
               .then(res => {
                   console.log(res);
                   statusImg.setAttribute('src', message.ok);
                   textMessage.textContent = message.success;
+                  console.log(state)
               })
               .catch(() => {
                   statusImg.setAttribute('src', message.fail);
